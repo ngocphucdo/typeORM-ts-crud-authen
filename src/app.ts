@@ -21,8 +21,8 @@ createConnection()
     // Routes
     app.use("/", routes);
 
-    app.listen(8000, () => {
-      console.log("Server running at port 8000");
+    app.listen(4000, () => {
+      console.log("Server running at port 4000");
     });
   })
   .catch((error) => console.log(error));

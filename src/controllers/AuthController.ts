@@ -30,7 +30,7 @@ class AuthController {
 
     //Create Token and send to response
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id, email: user.email, role: user.role },
       config.jwtSecret,
       { expiresIn: "1h" }
     );

@@ -16,20 +16,20 @@ router.get(
 );
 
 //Route Create a new user
-router.post("/", UserController.newUser);
+router.post("/register", UserController.newOne);
 
 //Route Edit user
 router.patch(
   "/:id([0-9]+)",
   [checkJWT, checkRole(["ADMIN"])],
-  UserController.editUser
+  UserController.editOneById
 );
 
 //Route delete user
 router.delete(
-  "/:id([0-9]+)",
+  "/:id",
   [checkJWT, checkRole(["ADMIN"])],
-  UserController.deleteUser
+  UserController.deleteOneById
 );
 
 export default router;

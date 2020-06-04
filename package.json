@@ -5,6 +5,7 @@
   "devDependencies": {
     "@types/node": "^8.0.29",
     "ts-node": "^3.3.0",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
@@ -22,12 +23,11 @@
     "jsonwebtoken": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^4.2.0",
-    "ts-node-dev": "^1.0.0-pre.44",
     "typeorm": "^0.2.25"
   },
   "scripts": {
     "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/app.ts",
-    "dev": "nodemon src/app.ts",
+    "dev": "ts-node-dev src/app.ts",
     "build": "tsc -p .",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
   }
