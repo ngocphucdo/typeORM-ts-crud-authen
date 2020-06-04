@@ -1,15 +1,17 @@
+import { User } from "./../entity/User";
 import { validate } from "class-validator";
 import { getRepository } from "typeorm";
 import { Request, Response } from "express";
-import { User } from "../entity/User";
+import UserService from "../services/UserServices";
+
+const testObj = new UserService();
 
 class UserController {
+  // userServiceObj = new UserService();
+
   static getAll = async (req: Request, res: Response) => {
-    const userRepository = getRepository(User);
-    const users = await userRepository.find({
-      select: ["id", "email", "name", "role"],
-    });
-    res.send(users);
+    // const userServiceObj = new UserService();
+    res.status(200).send(await testObj.getAllUserService);
   };
 
   static getOneById = async (req: Request, res: Response) => {
@@ -43,9 +45,10 @@ class UserController {
 
     //Hash password
     user.hashPassword();
-    const userRepository = getRepository(User);
+
     try {
-      await userRepository.save(user);
+      const userServiceObj = await new UserService();
+      userServiceObj.createUserService(user);
     } catch (error) {
       res.status(409).send({ message: "Conflict - Email already exited" });
       return;

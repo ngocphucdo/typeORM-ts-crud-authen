@@ -2,20 +2,16 @@ import { Post } from "./../entity/Post";
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
-import { User } from "../entity/User";
+import PostService from "../services/PostServices";
 
 class PostController {
   static getAll = async (req: Request, res: Response) => {
-    const postRepository = getRepository(Post);
-    const posts = await postRepository.find({
-      select: ["id", "title", "content", "createAt", "tag", "user_id"],
-    });
-    res.send(posts);
+    const postServiceObj = new PostService();
+    res.status(200).send(await postServiceObj.getAllPostService());
   };
 
   static getOneById = async (req: Request, res: Response) => {
     const id: string = req.params.id;
-
     const postRepository = getRepository(Post);
     try {
       const post = await postRepository.findOneOrFail(id, {
@@ -29,7 +25,6 @@ class PostController {
   };
 
   static newOne = async (req: Request, res: Response) => {
-    const postRepository = getRepository(Post);
     let { title, content, tag } = req.body;
 
     const idOfPoster = res.locals.jwtPayload.userId;
@@ -44,7 +39,11 @@ class PostController {
       res.status(400).send(errors[0].constraints);
       return;
     }
-    await postRepository.save(post);
+    const postServiceObj = new PostService();
+
+    postServiceObj.createPostService(post);
+
+    // await postRepository.save(post);
 
     res.status(201).send({ message: "Post created" });
   };

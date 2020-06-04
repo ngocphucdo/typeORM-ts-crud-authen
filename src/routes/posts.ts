@@ -1,8 +1,5 @@
-import { Post } from "./../entity/Post";
-import { Response, Request } from "express";
 import { Router } from "express";
 import PostController from "../controllers/PostController";
-import { checkRole } from "../middlewares/checkRole";
 import { checkJWT } from "../middlewares/checkJWT";
 
 const router = Router();
