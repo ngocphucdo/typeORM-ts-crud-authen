@@ -11,13 +11,10 @@ class PostController {
   };
 
   static getOneById = async (req: Request, res: Response) => {
-    const id: string = req.params.id;
-    const postRepository = getRepository(Post);
+    const userPostObj = new PostService();
+
     try {
-      const post = await postRepository.findOneOrFail(id, {
-        select: ["id", "title", "content", "createAt", "tag", "user_id"],
-      });
-      res.status(200).send(post);
+      res.status(200).send(await userPostObj.getOnePostService(req));
     } catch (error) {
       res.status(404).send({ message: "Post not found" });
       return;
@@ -49,26 +46,20 @@ class PostController {
   };
 
   static editOneById = async (req: Request, res: Response) => {
+    const postServiceObj = new PostService();
     const idOfUpdater = res.locals.jwtPayload.userId;
-    const id = req.params.id;
-    const postRepository = getRepository(Post);
-    let post;
-    try {
-      post = await postRepository.findOneOrFail(id);
-    } catch (error) {
-      res.status(404).send({ message: "Post not found" });
-      return;
-    }
+    //Find id exit or not
+    const post = await postServiceObj.findPostById(req, res);
     const { title, content, tag } = req.body;
 
+    //Check match
     if (idOfUpdater !== post.user_id) {
-      console.log(idOfUpdater);
-      console.log(post.user_id);
       return res.status(401).send({
         message: "Only the owner can edit post",
       });
     }
 
+    //Valdate
     post.title = title;
     post.content = content;
     post.tag = tag;
@@ -78,8 +69,9 @@ class PostController {
       return;
     }
 
+    //Save post
     try {
-      await postRepository.save(post);
+      await postServiceObj.editOneByIdPostService(post);
     } catch (error) {
       res.status(409).send({ message: "Conflict - This title already exited" });
       return;
@@ -89,22 +81,18 @@ class PostController {
 
   static deleteOneById = async (req: Request, res: Response) => {
     const idOfUpdater = res.locals.jwtPayload.userId;
+    const postServiceObj = new PostService();
     const postRepository = getRepository(Post);
-    let post;
+
+    const id = req.params.id;
+    //Check id in id
+    const post = await postServiceObj.findPostById(req, res);
+
+    //Check match id
     if (idOfUpdater !== post.user_id) {
-      console.log(idOfUpdater);
-      console.log(post.user_id);
       return res.status(401).send({
         message: "Only the owner can delete post",
       });
-    }
-    const id = req.params.id;
-
-    try {
-      post = await postRepository.findOneOrFail(id);
-    } catch (error) {
-      res.status(404).send({ message: "Post not found" });
-      return;
     }
 
     postRepository.delete(id);

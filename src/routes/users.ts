@@ -21,7 +21,7 @@ router.post("/register", UserController.newOne);
 //Route Edit user
 router.patch(
   "/:id([0-9]+)",
-  [checkJWT, checkRole(["ADMIN"])],
+  [checkJWT, checkRole(["USER"])],
   UserController.editOneById
 );
 
