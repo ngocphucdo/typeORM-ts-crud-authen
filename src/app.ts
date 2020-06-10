@@ -3,8 +3,6 @@ import { createConnection } from "typeorm";
 import * as express from "express";
 import * as helmet from "helmet";
 import * as cors from "cors";
-import { Request, Response } from "express";
-import { User } from "./entity/User";
 import routes from "./routes";
 
 // Connect to DB then start the Server
@@ -19,7 +17,7 @@ createConnection()
     app.use(helmet());
 
     // Routes
-    app.use("/", routes);
+    app.use("/api", routes);
 
     app.listen(4000, () => {
       console.log("Server running at port 4000");

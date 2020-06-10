@@ -3,6 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 import { User } from "../entity/User";
+import { Permision } from "./../entity/Permision";
 import config from "../config/config";
 
 class AuthController {
@@ -34,6 +35,14 @@ class AuthController {
       config.jwtSecret,
       { expiresIn: "1h" }
     );
+
+    let role;
+
+    //Check role and log Permision of User Login
+    const permisionRepository = getRepository(Permision);
+
+    const permisionOfUser = await permisionRepository.find(role);
+    console.log(permisionOfUser.filter((p) => p.role === user.role));
 
     res.send({
       message: "Logged",

@@ -6,7 +6,7 @@ import {
   Unique,
 } from "typeorm";
 import { Length, IsNotEmpty } from "class-validator";
-import { User } from "./User";
+
 @Entity()
 @Unique(["title"])
 export class Post {
